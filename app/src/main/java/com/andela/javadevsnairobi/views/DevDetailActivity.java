@@ -1,4 +1,4 @@
-package com.andela.javadevsnairobi;
+package com.andela.javadevsnairobi.views;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
