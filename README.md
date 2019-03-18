@@ -1,2 +1,4 @@
 # javadevnairobi
-An android app that shows Java devs in Nairobi
+
+An android app that shows Java Developers in Nairobi
+
