@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/rectangle_bg"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rectangle_height"/>
+
+    <android.support.constraint.ConstraintLayout
+        app:layout_constraintTop_toBottomOf="@id/rectangle_bg"
+        app:layout_constraintBottom_toBottomOf="@id/rectangle_bg"
+        android:id="@+id/rectangle"
+        android:layout_margin="25dp"
+        android:padding="@dimen/list_item_margin"
+        android:background="@drawable/shape_rounded_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rectangle_height">
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Headline"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintLeft_toLeftOf="@id/rectangle"
+            app:layout_constraintRight_toRightOf="@id/rectangle"
+            app:layout_constraintBottom_toTopOf="@id/dev_bio"
+            android:id="@+id/dev_name"
+            android:text="@string/dev_full_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintLeft_toLeftOf="@id/rectangle"
+            app:layout_constraintRight_toRightOf="@id/rectangle"
+            app:layout_constraintBottom_toTopOf="@id/dev_github_link"
+            android:id="@+id/dev_bio"
+            android:text="@string/dev_bio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/ic_link_grey_24dp"
+            android:drawablePadding="@dimen/small_margin"
+            app:layout_constraintBottom_toTopOf="@+id/dev_username"
+            android:id="@+id/dev_github_link"
+            android:text="@string/dev_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_link_grey_24dp" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:gravity="center_vertical"
+            android:drawableStart="@drawable/ic_account_circle_grey_24dp"
+            android:drawablePadding="@dimen/small_margin"
+            app:layout_constraintBottom_toBottomOf="@id/rectangle"
+            android:id="@+id/dev_username"
+            android:text="@string/dev_github_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_account_circle_grey_24dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="@+id/rectangle"
+        app:layout_constraintBottom_toTopOf="@id/rectangle"
+        app:layout_constraintLeft_toLeftOf="@id/rectangle"
+        app:layout_constraintRight_toRightOf="@id/rectangle"
+        android:id="@+id/avatar_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_circle"/>
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="@id/avatar_bg"
+        app:layout_constraintBottom_toBottomOf="@id/avatar_bg"
+        app:layout_constraintLeft_toLeftOf="@id/avatar_bg"
+        app:layout_constraintRight_toRightOf="@id/avatar_bg"
+        android:src="@drawable/circle_github_avatar"
+        android:id="@+id/dev_avatar"
+        android:layout_width="@dimen/image_width"
+        android:layout_height="@dimen/image_width" />
+
+    <Button
+        android:layout_margin="@dimen/list_item_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="@dimen/small_margin"
+        android:drawablePadding="@dimen/small_margin"
+        android:text="@string/share_profile"
+        android:drawableStart="@drawable/ic_share_white_24dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_share_white_24dp" />
+
+</android.support.constraint.ConstraintLayout>
