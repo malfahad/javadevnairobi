@@ -35,10 +35,10 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         avatar = findViewById(R.id.dev_avatar);
 
         presenter = new GithubPresenter(this);
-        presenter.getUser("malfahad");
+        String username = getIntent().getExtras().getString("username");
+        presenter.getUser(username);
 
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,7 +53,6 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
 
     @Override
     public void showUser(GithubUser githubUser) {
-
         username.setText(githubUser.getUsername());
         name.setText(githubUser.getName());
         bio.setText(githubUser.getBio());
