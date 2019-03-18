@@ -83,6 +83,7 @@
         app:layout_constraintBottom_toBottomOf="@id/avatar_bg"
         app:layout_constraintLeft_toLeftOf="@id/avatar_bg"
         app:layout_constraintRight_toRightOf="@id/avatar_bg"
+        android:padding="@dimen/small_margin"
         android:src="@drawable/circle_github_avatar"
         android:id="@+id/dev_avatar"
         android:layout_width="@dimen/image_width"
