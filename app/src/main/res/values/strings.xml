@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Java Devs Nairobi</string>
     <string name="dev_username">GithubUser</string>
+    <string name="dev_full_name">Github User</string>
+    <string name="dev_bio">GithubUser is super cool. the coolest you will ever know.</string>
+    <string name="dev_github_link">https://github.com/githubuser</string>
+    <string name="share_profile">Share profile</string>
 </resources>
