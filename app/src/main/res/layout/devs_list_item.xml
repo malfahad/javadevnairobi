@@ -19,7 +19,6 @@
     </RelativeLayout>
 
      <TextView
-        android:text="@string/dev_username"
         style="@style/Base.TextAppearance.AppCompat.Body1"
         android:id="@+id/dev_list_username"
         android:layout_width="wrap_content"
