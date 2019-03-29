@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Java Devs Nairobi</string>
     <string name="share_profile">Share profile</string>
+    <string name="refresh">Refresh</string>
 </resources>

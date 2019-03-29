@@ -1,9 +1,15 @@
 package com.andela.javadevsnairobi.views;
 
+import android.app.ProgressDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 
 import com.andela.javadevsnairobi.R;
@@ -17,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements GithubAllUsersVie
 
     RecyclerView devsRecyclerView;
     GithubPresenter presenter;
+    SwipeRefreshLayout swipeRefreshLayout;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -25,14 +33,47 @@ public class MainActivity extends AppCompatActivity implements GithubAllUsersVie
         setContentView(R.layout.activity_main);
 
         devsRecyclerView = findViewById(R.id.devs_recycler_view);
-        devsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        devsRecyclerView.setLayoutManager(new GridLayoutManager(this,getResources().getInteger(R.integer.column_count)));
         presenter = new GithubPresenter(this);
         presenter.getAllUsers();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
+
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.getAllUsers();
+            }
+        });
     }
 
     @Override
     public void showAllUsers(List<GithubUser> githubUsers) {
         GithubAdapter adapter = new GithubAdapter(githubUsers);
         devsRecyclerView.setAdapter(adapter);
+        swipeRefreshLayout.setRefreshing(false);
+        progressDialog.hide();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.refresh_item:
+                swipeRefreshLayout.setRefreshing(true);
+                presenter.getAllUsers();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
