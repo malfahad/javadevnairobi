@@ -2,6 +2,7 @@ package com.andela.javadevsnairobi.views;
 
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -28,6 +29,8 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
     Button shareButton;
     GithubPresenter presenter;
     ConstraintLayout profileView;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,10 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
 
         shareButton = findViewById(R.id.dev_share_btn);
         shareButton.setOnClickListener(this);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.show();
 
         presenter = new GithubPresenter(this);
         String username = getIntent().getExtras().getString("username");
@@ -73,6 +80,7 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         if (githubUser.getBio() != null)
             if (githubUser.getBio().contains("\n"))
                 resizeProfileViewHeight(profileView, githubUser.getBio());
+        progressDialog.hide();
     }
 
     @Override
@@ -93,5 +101,6 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         ViewGroup.LayoutParams params = profileView.getLayoutParams();
         params.height += extraHeight;
         profileView.setLayoutParams(params);
+        progressDialog.hide();
     }
 }
