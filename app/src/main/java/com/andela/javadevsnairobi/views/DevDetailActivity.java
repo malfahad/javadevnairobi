@@ -1,6 +1,7 @@
 package com.andela.javadevsnairobi.views;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.andela.javadevsnairobi.R;
 import com.andela.javadevsnairobi.model.GithubUser;
 import com.andela.javadevsnairobi.presenter.GithubPresenter;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -30,6 +32,7 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
     GithubPresenter presenter;
     ConstraintLayout profileView;
     ProgressDialog progressDialog;
+    GithubUser mGithubUser;
 
 
     @Override
@@ -58,6 +61,7 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
 
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -71,6 +75,7 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
 
     @Override
     public void showUser(GithubUser githubUser) {
+        mGithubUser = githubUser;
         username.setText(githubUser.getUsername());
         name.setText(githubUser.getName());
         bio.setText(githubUser.getBio());
@@ -95,6 +100,26 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         startActivity(Intent.createChooser(shareIntent, "Share using "));
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String serailizedGithubUser = new Gson().toJson(mGithubUser);
+        SharedPreferences githubUser = getSharedPreferences("GithubUser", MODE_PRIVATE);
+        SharedPreferences.Editor editor = githubUser.edit();
+        editor.putString("githubUser", serailizedGithubUser);
+        editor.apply();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences githubUser = getSharedPreferences("GithubUser", MODE_PRIVATE);
+        String serializedGithubUser = githubUser.getString("githubUser", null);
+        GithubUser mGithubUser = new Gson().fromJson(serializedGithubUser, GithubUser.class);
+        if (mGithubUser != null) showUser(mGithubUser);
+    }
+
     public void resizeProfileViewHeight(ConstraintLayout profileView, String bio) {
         int lines = bio.split("\n").length;
         int extraHeight = lines * 15;
@@ -103,4 +128,5 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         profileView.setLayoutParams(params);
         progressDialog.hide();
     }
+
 }
