@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/rectangle_bg"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
@@ -45,6 +46,8 @@
             android:gravity="center_vertical"
             android:drawableStart="@drawable/ic_link_grey_24dp"
             android:drawablePadding="@dimen/small_margin"
+            app:layout_constraintLeft_toLeftOf="@id/rectangle"
+            app:layout_constraintRight_toRightOf="@id/rectangle"
             app:layout_constraintBottom_toTopOf="@+id/dev_username"
             android:id="@+id/dev_github_link"
             android:layout_width="wrap_content"
@@ -56,6 +59,8 @@
             android:gravity="center_vertical"
             android:drawableStart="@drawable/ic_account_circle_grey_24dp"
             android:drawablePadding="@dimen/small_margin"
+            app:layout_constraintLeft_toLeftOf="@id/rectangle"
+            app:layout_constraintRight_toRightOf="@id/rectangle"
             app:layout_constraintBottom_toBottomOf="@id/rectangle"
             android:id="@+id/dev_username"
             android:layout_width="wrap_content"
