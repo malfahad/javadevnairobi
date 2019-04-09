@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.app.ProgressDialog;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,11 +18,13 @@ import com.andela.javadevsnairobi.R;
 import com.andela.javadevsnairobi.model.GithubUser;
 import com.andela.javadevsnairobi.presenter.GithubPresenter;
 import com.google.gson.Gson;
+import com.andela.javadevsnairobi.util.NetworkUtil;
+import com.andela.javadevsnairobi.util.NetworkUtilContract;
 import com.squareup.picasso.Picasso;
 
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
-public class DevDetailActivity extends AppCompatActivity implements GithubUserView, View.OnClickListener {
+public class DevDetailActivity extends AppCompatActivity implements GithubUserView, View.OnClickListener, NetworkUtilContract {
 
     TextView username;
     TextView name;
@@ -34,6 +37,8 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
     ProgressDialog progressDialog;
     GithubUser mGithubUser;
 
+    Snackbar snackbar;
+    String devUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +58,12 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
-        progressDialog.show();
+
+        NetworkUtil.checkInternetConnection(this);
 
         presenter = new GithubPresenter(this);
-        String username = getIntent().getExtras().getString("username");
-        presenter.getUser(username);
+        devUsername = getIntent().getExtras().getString("username");
+        presenter.getUser(devUsername);
 
     }
 
@@ -129,4 +135,28 @@ public class DevDetailActivity extends AppCompatActivity implements GithubUserVi
         progressDialog.hide();
     }
 
+    @Override
+    public void onInternetUnavailable() {
+        progressDialog.hide();
+        snackbar = Snackbar.make(username, "Internet connection is unavailable", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ;
+                NetworkUtil.checkInternetConnection(DevDetailActivity.this);
+            }
+        });
+        snackbar.show();
+    }
+
+    @Override
+    public void onInternetRestored() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.show();
+                presenter.getUser(devUsername);
+            }
+        });
+    }
 }

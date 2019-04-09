@@ -2,6 +2,7 @@ package com.andela.javadevsnairobi.views;
 
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 
 import com.andela.javadevsnairobi.R;
@@ -19,18 +21,20 @@ import com.andela.javadevsnairobi.model.GithubUser;
 import com.andela.javadevsnairobi.presenter.GithubPresenter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.andela.javadevsnairobi.util.NetworkUtil;
+import com.andela.javadevsnairobi.util.NetworkUtilContract;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements GithubAllUsersView {
+public class MainActivity extends AppCompatActivity implements GithubAllUsersView, NetworkUtilContract {
 
     RecyclerView devsRecyclerView;
     GithubPresenter presenter;
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressDialog progressDialog;
     List<GithubUser> mGithubUsers;
-
+    Snackbar snackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements GithubAllUsersVie
         devsRecyclerView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.column_count)));
         presenter = new GithubPresenter(this);
         presenter.getAllUsers();
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
-        progressDialog.show();
+
+        NetworkUtil.checkInternetConnection(this);
+
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements GithubAllUsersVie
         swipeRefreshLayout.setRefreshing(false);
         progressDialog.hide();
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,5 +110,31 @@ public class MainActivity extends AppCompatActivity implements GithubAllUsersVie
         String serializedGithubUsers = githubUsers.getString("github users", null);
         List<GithubUser> githubUserList = new Gson().fromJson(serializedGithubUsers, listType);
         if (githubUserList != null) showAllUsers(githubUserList);
+    }
+
+    @Override
+    public void onInternetUnavailable() {
+        progressDialog.hide();
+        snackbar = Snackbar.make(devsRecyclerView, "Internet connection is unavailable", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("Retry", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ;
+                NetworkUtil.checkInternetConnection(MainActivity.this);
+            }
+        });
+        snackbar.show();
+    }
+
+
+    @Override
+    public void onInternetRestored() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.show();
+                presenter.getAllUsers();
+            }
+        });
     }
 }
